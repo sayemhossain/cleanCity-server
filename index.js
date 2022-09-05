@@ -60,6 +60,13 @@ async function run() {
       res.send(result);
     });
 
+    // get all admin and super admin
+    app.get("/alladmin", async (req, res) => {
+      const query = { role: "admin" };
+      const result = await userCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // this is make admin
     app.put("/user/admin/:email", async (req, res) => {
       const email = req.params.email;
@@ -77,6 +84,13 @@ async function run() {
       const user = await userCollection.findOne({ email: email });
       const isAdmin = user?.role === "admin";
       res.send({ admin: isAdmin });
+    });
+    //this is for delete admin
+    app.delete("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const filter = { email: email };
+      const result = await userCollection.deleteOne(filter);
+      res.send(result);
     });
 
     // get all blogs from database
@@ -117,7 +131,8 @@ async function run() {
 
     //get all contact
     app.get("/contact", async (req, res) => {
-      const result = await contactCollection.find().toArray();
+      const contacts = await contactCollection.find().toArray();
+      const result = contacts.reverse();
       res.send(result);
     });
   } finally {
