@@ -26,6 +26,9 @@ async function run() {
       ----------------------------------------------------------------------------*/
     const userCollection = client.db("clean-city-admin").collection("users");
     const blogCollection = client.db("clean-city-admin").collection("blogs");
+    const packageOrderCollection = client
+      .db("clean-city-admin")
+      .collection("packageOrders");
     const contactCollection = client
       .db("clean-city-admin")
       .collection("contacts");
@@ -133,6 +136,13 @@ async function run() {
     app.get("/contact", async (req, res) => {
       const contacts = await contactCollection.find().toArray();
       const result = contacts.reverse();
+      res.send(result);
+    });
+
+    // add package
+    app.post("/package", async (req, res) => {
+      const packageData = req.body;
+      const result = await packageOrderCollection.insertOne(packageData);
       res.send(result);
     });
   } finally {
