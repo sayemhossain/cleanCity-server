@@ -145,6 +145,12 @@ async function run() {
       const result = await packageOrderCollection.insertOne(packageData);
       res.send(result);
     });
+    //get all contact
+    app.get("/package", async (req, res) => {
+      const packages = await packageOrderCollection.find().toArray();
+      const result = packages.reverse();
+      res.send(result);
+    });
   } finally {
   }
 }
