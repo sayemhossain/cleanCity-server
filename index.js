@@ -26,6 +26,9 @@ async function run() {
       ----------------------------------------------------------------------------*/
     const userCollection = client.db("clean-city-admin").collection("users");
     const blogCollection = client.db("clean-city-admin").collection("blogs");
+    const paymentCollection = client
+      .db("clean-city-admin")
+      .collection("payments");
     const packageOrderCollection = client
       .db("clean-city-admin")
       .collection("packageOrders");
@@ -152,9 +155,40 @@ async function run() {
       res.send(result);
     });
     // limit dashboard access
-    app.get("/package/:email", async (req, res) => {
+    app.get("/userpackage/:email", async (req, res) => {
       const email = req.params.email;
-      const result = await packageOrderCollection.findOne({ email: email });
+      const result = await packageOrderCollection
+        .find({ email: email })
+        .toArray();
+
+      res.send(result);
+    });
+    app.get("/userpackage/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await packageOrderCollection.findOne(query);
+      res.send(result);
+    });
+
+    //this is for payment
+    app.post("/payment", async (req, res) => {
+      const paymentData = req.body;
+      const result = await paymentCollection.insertOne(paymentData);
+      res.send(result);
+    });
+    //get id based payment
+    app.get("/payment/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await paymentCollection.findOne(filter);
+      res.send(result);
+    });
+    //get based on email
+    app.get("/payments/:email", async (req, res) => {
+      const email = req.params.email;
+      const filter = { userEmail: email };
+      const productPayment = await paymentCollection.find(filter).toArray();
+      const result = productPayment.reverse();
       res.send(result);
     });
   } finally {
