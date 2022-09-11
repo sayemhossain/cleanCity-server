@@ -151,6 +151,12 @@ async function run() {
       const result = packages.reverse();
       res.send(result);
     });
+    // limit dashboard access
+    app.get("/package/:email", async (req, res) => {
+      const email = req.params.email;
+      const result = await packageOrderCollection.findOne({ email: email });
+      res.send(result);
+    });
   } finally {
   }
 }
