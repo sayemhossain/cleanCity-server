@@ -183,6 +183,11 @@ async function run() {
       const result = await paymentCollection.findOne(filter);
       res.send(result);
     });
+    //get id based payment
+    app.get("/payments", async (req, res) => {
+      const result = await paymentCollection.find().toArray();
+      res.send(result);
+    });
     //get based on email
     app.get("/payments/:email", async (req, res) => {
       const email = req.params.email;
