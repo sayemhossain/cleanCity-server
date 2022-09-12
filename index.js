@@ -35,6 +35,9 @@ async function run() {
     const contactCollection = client
       .db("clean-city-admin")
       .collection("contacts");
+    const productCollection = client
+      .db("clean-city-admin")
+      .collection("products");
 
     /*-----------------------------------------------------------------------------
                        CREATE USER AND STORE IN DATABASE CODE
@@ -194,6 +197,28 @@ async function run() {
       const filter = { userEmail: email };
       const productPayment = await paymentCollection.find(filter).toArray();
       const result = productPayment.reverse();
+      res.send(result);
+    });
+
+    //this is for upload product
+    app.post("/products", async (req, res) => {
+      const productData = req.body;
+      const result = await productCollection.insertOne(productData);
+      res.send(result);
+    });
+
+    //get all product
+    app.get("/products", async (req, res) => {
+      const result = await productCollection.find().toArray();
+      res.send(result);
+    });
+
+    //get based on email
+    app.get("/products/:email", async (req, res) => {
+      const email = req.params.email;
+      const filter = { email: email };
+      const product = await productCollection.find(filter).toArray();
+      const result = product.reverse();
       res.send(result);
     });
   } finally {
