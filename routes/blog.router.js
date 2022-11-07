@@ -14,4 +14,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+//find one using id from database
+router.get("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const blog = await blogCollection.findOne(query);
+    res.status(error).send(blog);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
 module.exports = router;

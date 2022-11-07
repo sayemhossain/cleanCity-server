@@ -42,7 +42,7 @@ async function run() {
       ----------------------------------------------------------------------------*/
     //get all user
     app.use("/user", usersRouters);
-    app.use("/blog", blogRouters);
+    app.use("/blogs", blogRouters);
 
     // get all admin and super admin
     app.get("/alladmin", async (req, res) => {
@@ -70,15 +70,7 @@ async function run() {
       res.send({ admin: isAdmin });
     });
 
-    //find one using id from database
-    app.get("/blogs/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: ObjectId(id) };
-      const blog = await blogCollection.findOne(query);
-      res.send(blog);
-    });
-
-    // add new blo
+    // add new blog
     app.post("/blogs", async (req, res) => {
       const newBlog = req.body;
       const result = await blogCollection.insertOne(newBlog);
