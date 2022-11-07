@@ -116,7 +116,7 @@ async function run() {
       res.send(blog);
     });
 
-    // add new blog
+    // add new blo
     app.post("/blogs", async (req, res) => {
       const newBlog = req.body;
       const result = await blogCollection.insertOne(newBlog);
