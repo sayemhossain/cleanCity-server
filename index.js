@@ -7,6 +7,7 @@ const { ObjectId } = require("mongodb");
 const dbConnect = require("./utils/dbConnect");
 const usersRouters = require("./routes/user.route");
 const blogRouters = require("./routes/blog.router");
+const contactRouters = require("./routes/contact.router");
 
 // this is midlewiere
 app.use(cors());
@@ -27,12 +28,7 @@ async function run() {
     const paymentCollection = client
       .db("clean-city-admin")
       .collection("payments");
-    const packageOrderCollection = client
-      .db("clean-city-admin")
-      .collection("packageOrders");
-    const contactCollection = client
-      .db("clean-city-admin")
-      .collection("contacts");
+
     const productCollection = client
       .db("clean-city-admin")
       .collection("products");
@@ -43,6 +39,7 @@ async function run() {
     //get all user
     app.use("/user", usersRouters);
     app.use("/blogs", blogRouters);
+    app.use("/contact", contactRouters);
 
     // get all admin and super admin
     app.get("/alladmin", async (req, res) => {
@@ -68,35 +65,6 @@ async function run() {
       const user = await userCollection.findOne({ email: email });
       const isAdmin = user?.role === "admin";
       res.send({ admin: isAdmin });
-    });
-
-    // add new blog
-    app.post("/blogs", async (req, res) => {
-      const newBlog = req.body;
-      const result = await blogCollection.insertOne(newBlog);
-      res.send(result);
-    });
-
-    //this is for delete tool
-    app.delete("/blogs/:id", async (req, res) => {
-      const id = req.params.id;
-      const filter = { _id: ObjectId(id) };
-      const result = await blogcollection.deleteOne(filter);
-      res.send(result);
-    });
-
-    //this is for review
-    app.post("/contact", async (req, res) => {
-      const contactData = req.body;
-      const result = await contactCollection.insertOne(contactData);
-      res.send(result);
-    });
-
-    //get all contact
-    app.get("/contact", async (req, res) => {
-      const contacts = await contactCollection.find().toArray();
-      const result = contacts.reverse();
-      res.send(result);
     });
 
     // add package

@@ -14,6 +14,17 @@ router.get("/", async (req, res) => {
   }
 });
 
+//add a new blog
+router.post("/", async (req, res) => {
+  try {
+    const newBlog = req.body;
+    const result = await blogCollection.insertOne(newBlog);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
 //find one using id from database
 router.get("/:id", async (req, res) => {
   try {
@@ -21,6 +32,18 @@ router.get("/:id", async (req, res) => {
     const query = { _id: ObjectId(id) };
     const blog = await blogCollection.findOne(query);
     res.status(error).send(blog);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
+//this is for delete blog
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const filter = { _id: ObjectId(id) };
+    const result = await blogCollection.deleteOne(filter);
+    res.status(200).send(result);
   } catch (error) {
     res.status(404).send(error);
   }
