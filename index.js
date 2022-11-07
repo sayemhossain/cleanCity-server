@@ -119,7 +119,7 @@ async function run() {
     // add new blog
     app.post("/blogs", async (req, res) => {
       const newBlog = req.body;
-      const result = await blogcollection.insertOne(newBlog);
+      const result = await blogCollection.insertOne(newBlog);
       res.send(result);
     });
 
@@ -179,6 +179,7 @@ async function run() {
       const result = await paymentCollection.insertOne(paymentData);
       res.send(result);
     });
+
     //get id based payment
     app.get("/payment/:id", async (req, res) => {
       const id = req.params.id;
