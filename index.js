@@ -3,19 +3,17 @@ const app = express();
 const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
+const { ObjectId } = require("mongodb");
+const dbConnect = require("./utils/dbConnect");
+const usersRouters = require("./routes/user.route");
 
 // this is midlewiere
 app.use(cors());
 app.use(express.json());
 
-// This code from mongodb database start
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.v36mb1p.mongodb.net/?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
+// //this is for connecting database
+const client = dbConnect();
+
 async function run() {
   try {
     await client.connect();
@@ -43,10 +41,7 @@ async function run() {
                        CREATE USER AND STORE IN DATABASE CODE
       ----------------------------------------------------------------------------*/
     //get all user
-    app.get("/user", async (req, res) => {
-      const users = await userCollection.find().toArray();
-      res.send(users);
-    });
+    app.use("/user", usersRouters);
     // this is for user collection
     app.put("/user/:email", async (req, res) => {
       const email = req.params.email;
