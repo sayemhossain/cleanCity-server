@@ -5,6 +5,7 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 const dbConnect = require("./utils/dbConnect");
 const usersRouters = require("./routes/user.route");
+const adminRouters = require("./routes/admin.router");
 const blogRouters = require("./routes/blog.router");
 const contactRouters = require("./routes/contact.router");
 const packageRouters = require("./routes/package.route");
@@ -25,6 +26,7 @@ async function run() {
 
     //This is the all routes
     app.use("/user", usersRouters);
+    app.use("/admin", adminRouters);
     app.use("/blogs", blogRouters);
     app.use("/contact", contactRouters);
     app.use("/package", packageRouters);
@@ -33,19 +35,11 @@ async function run() {
 
     // get all admin and super admin
     app.get("/alladmin", async (req, res) => {
-      const query = { role: "admin" };
-      const result = await userCollection.find(query).toArray();
       res.send(result);
     });
 
     // this is make admin
     app.put("/user/admin/:email", async (req, res) => {
-      const email = req.params.email;
-      const filter = { email: email };
-      const updateDoc = {
-        $set: { role: "admin" },
-      };
-      const result = await userCollection.updateOne(filter, updateDoc);
       res.send(result);
     });
 
