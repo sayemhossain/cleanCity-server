@@ -8,6 +8,7 @@ const dbConnect = require("./utils/dbConnect");
 const usersRouters = require("./routes/user.route");
 const blogRouters = require("./routes/blog.router");
 const contactRouters = require("./routes/contact.router");
+const packageRouters = require("./routes/package.route");
 
 // this is midlewiere
 app.use(cors());
@@ -40,6 +41,7 @@ async function run() {
     app.use("/user", usersRouters);
     app.use("/blogs", blogRouters);
     app.use("/contact", contactRouters);
+    app.use("/package", packageRouters);
 
     // get all admin and super admin
     app.get("/alladmin", async (req, res) => {
@@ -65,34 +67,6 @@ async function run() {
       const user = await userCollection.findOne({ email: email });
       const isAdmin = user?.role === "admin";
       res.send({ admin: isAdmin });
-    });
-
-    // add package
-    app.post("/package", async (req, res) => {
-      const packageData = req.body;
-      const result = await packageOrderCollection.insertOne(packageData);
-      res.send(result);
-    });
-    //get all contact
-    app.get("/package", async (req, res) => {
-      const packages = await packageOrderCollection.find().toArray();
-      const result = packages.reverse();
-      res.send(result);
-    });
-    // limit dashboard access
-    app.get("/userpackage/:email", async (req, res) => {
-      const email = req.params.email;
-      const result = await packageOrderCollection
-        .find({ email: email })
-        .toArray();
-
-      res.send(result);
-    });
-    app.get("/userpackage/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: ObjectId(id) };
-      const result = await packageOrderCollection.findOne(query);
-      res.send(result);
     });
 
     //this is for payment
