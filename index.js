@@ -6,6 +6,7 @@ const port = process.env.PORT || 5000;
 const { ObjectId } = require("mongodb");
 const dbConnect = require("./utils/dbConnect");
 const usersRouters = require("./routes/user.route");
+const blogRouters = require("./routes/blog.router");
 
 // this is midlewiere
 app.use(cors());
@@ -22,7 +23,7 @@ async function run() {
     /*-----------------------------------------------------------------------------
                                    ALL COLLECTION CODE
       ----------------------------------------------------------------------------*/
-    const blogCollection = client.db("clean-city-admin").collection("blogs");
+
     const paymentCollection = client
       .db("clean-city-admin")
       .collection("payments");
@@ -41,6 +42,7 @@ async function run() {
       ----------------------------------------------------------------------------*/
     //get all user
     app.use("/user", usersRouters);
+    app.use("/blog", blogRouters);
 
     // get all admin and super admin
     app.get("/alladmin", async (req, res) => {
@@ -66,12 +68,6 @@ async function run() {
       const user = await userCollection.findOne({ email: email });
       const isAdmin = user?.role === "admin";
       res.send({ admin: isAdmin });
-    });
-
-    // get all blogs from database
-    app.get("/blogs", async (req, res) => {
-      const result = await blogCollection.find().toArray();
-      res.send(result);
     });
 
     //find one using id from database

@@ -42,6 +42,7 @@ router.put("/:email", async (req, res) => {
     res.status(404).send("Not found");
   }
 });
+
 router.delete("/:email", async (req, res) => {
   try {
     const email = req.params.email;
