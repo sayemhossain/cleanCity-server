@@ -14,7 +14,18 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.put("/", async (req, res) => {
+router.get("/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const query = { email: email };
+    const result = await userCollection.find(query).toArray();
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(404).send("Not found");
+  }
+});
+
+router.put("/:email", async (req, res) => {
   try {
     const email = req.params.email;
     const user = req.body;
@@ -26,6 +37,16 @@ router.put("/", async (req, res) => {
     };
     const result = await userCollection.updateOne(filter, updateDoc, options);
 
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(404).send("Not found");
+  }
+});
+router.delete("/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const filter = { email: email };
+    const result = await userCollection.deleteOne(filter);
     res.status(200).send(result);
   } catch (error) {
     res.status(404).send("Not found");

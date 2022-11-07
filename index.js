@@ -22,7 +22,6 @@ async function run() {
     /*-----------------------------------------------------------------------------
                                    ALL COLLECTION CODE
       ----------------------------------------------------------------------------*/
-    const userCollection = client.db("clean-city-admin").collection("users");
     const blogCollection = client.db("clean-city-admin").collection("blogs");
     const paymentCollection = client
       .db("clean-city-admin")
@@ -42,27 +41,6 @@ async function run() {
       ----------------------------------------------------------------------------*/
     //get all user
     app.use("/user", usersRouters);
-    // this is for user collection
-    app.put("/user/:email", async (req, res) => {
-      const email = req.params.email;
-      const user = req.body;
-      const filter = { email: email };
-      const options = { upsert: true };
-      const updateDoc = {
-        $set: user,
-      };
-      const result = await userCollection.updateOne(filter, updateDoc, options);
-
-      res.send(result);
-    });
-
-    //get specific user
-    app.get("/user/:email", async (req, res) => {
-      const email = req.params.email;
-      const query = { email: email };
-      const result = await userCollection.find(query).toArray();
-      res.send(result);
-    });
 
     // get all admin and super admin
     app.get("/alladmin", async (req, res) => {
@@ -88,13 +66,6 @@ async function run() {
       const user = await userCollection.findOne({ email: email });
       const isAdmin = user?.role === "admin";
       res.send({ admin: isAdmin });
-    });
-    //this is for delete admin
-    app.delete("/user/:email", async (req, res) => {
-      const email = req.params.email;
-      const filter = { email: email };
-      const result = await userCollection.deleteOne(filter);
-      res.send(result);
     });
 
     // get all blogs from database
