@@ -32,30 +32,11 @@ async function run() {
     app.use("/package", packageRouters);
     app.use("/payments", paymentsRouters);
     app.use("/products", productsRouters);
-
-    // get all admin and super admin
-    app.get("/alladmin", async (req, res) => {
-      res.send(result);
-    });
-
-    // this is make admin
-    app.put("/user/admin/:email", async (req, res) => {
-      res.send(result);
-    });
-
-    // limit dashboard access
-    app.get("/admin/:email", async (req, res) => {
-      const email = req.params.email;
-      const user = await userCollection.findOne({ email: email });
-      const isAdmin = user?.role === "admin";
-      res.send({ admin: isAdmin });
-    });
   } finally {
   }
 }
 run().catch(console.dir);
 
-// basic setup code
 app.get("/", (req, res) => {
   res.send("Hello from Clean City!");
 });

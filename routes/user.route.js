@@ -43,21 +43,6 @@ router.put("/:email", async (req, res) => {
   }
 });
 
-router.put("/admin/:email", async (req, res) => {
-  try {
-    const email = req.params.email;
-    const filter = { email: email };
-    const updateDoc = {
-      $set: { role: "admin" },
-    };
-    const result = await userCollection.updateOne(filter, updateDoc);
-
-    res.status(200).send(result);
-  } catch (error) {
-    res.status(404).send("Not found");
-  }
-});
-
 router.delete("/:email", async (req, res) => {
   try {
     const email = req.params.email;
