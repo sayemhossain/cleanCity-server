@@ -44,3 +44,5 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Clean City listening on port ${port}`);
 });
+//userName: ehawker
+//password: x4ViNMqwg5Z0KzNN

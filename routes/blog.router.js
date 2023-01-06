@@ -1,4 +1,5 @@
 const express = require("express");
+const { ObjectId } = require("mongodb");
 const router = express.Router();
 const dbConnect = require("../utils/dbConnect");
 const client = dbConnect();
@@ -26,12 +27,14 @@ router.post("/", async (req, res) => {
 });
 
 //find one using id from database
-router.get("/:id", async (req, res) => {
+router.get("/blog-details/:blogId", async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.blogId;
+    console.log(id);
     const query = { _id: ObjectId(id) };
-    const blog = await blogCollection.findOne(query);
-    res.status(error).send(blog);
+
+    const result = await blogCollection.findOne(query);
+    res.send(result);
   } catch (error) {
     res.status(404).send(error);
   }
