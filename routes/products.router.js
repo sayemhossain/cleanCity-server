@@ -1,5 +1,5 @@
 const express = require("express");
-const { ObjectId } = require("mongodb");
+const { ObjectId, ObjectID } = require("mongodb");
 const router = express.Router();
 const dbConnect = require("../utils/dbConnect");
 const client = dbConnect();
@@ -29,6 +29,18 @@ router.get("/get-specific-user-products", async (req, res) => {
   try {
     const email = req.query.email;
     const filter = { email: email };
+
+    const product = await productCollection.find(filter).toArray();
+    res.status(200).send(product);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
+router.get("/get-specific-products", async (req, res) => {
+  try {
+    const productId = req.query.productId;
+    const filter = { _id: ObjectId(productId) };
 
     const product = await productCollection.find(filter).toArray();
     res.status(200).send(product);
