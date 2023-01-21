@@ -6,6 +6,15 @@ const client = dbConnect();
 
 const orderCollection = client.db("clean-city-admin").collection("orders");
 
+router.get("/", async (req, res) => {
+  try {
+    const result = await orderCollection.find().toArray();
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const orderDetails = req.body;
