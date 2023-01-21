@@ -11,6 +11,7 @@ const contactRouters = require("./routes/contact.router");
 const packageRouters = require("./routes/package.route");
 const paymentsRouters = require("./routes/payment.route");
 const productsRouters = require("./routes/products.router");
+const ordersRouters = require("./routes/orders.router");
 
 // this is midlewiere
 app.use(cors());
@@ -32,6 +33,7 @@ async function run() {
     app.use("/package", packageRouters);
     app.use("/payments", paymentsRouters);
     app.use("/products", productsRouters);
+    app.use("/orders", ordersRouters);
   } finally {
   }
 }
